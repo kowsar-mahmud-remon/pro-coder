@@ -12,8 +12,6 @@ const LoginPage = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm();
 
-  // console.log(isLoggedIn());
-
   const onSubmit = async (data: any) => {
     try {
       const res = await userLogin({ ...data }).unwrap();

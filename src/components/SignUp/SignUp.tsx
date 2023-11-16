@@ -7,24 +7,17 @@ import toast from "react-hot-toast";
 
 const SignUpPage = () => {
   const [createUser, { data }] = useCreateUserMutation();
-  console.log({ data });
   const router = useRouter();
 
   const { register, handleSubmit } = useForm();
 
-  // console.log(isLoggedIn());
-
   const onSubmit = async (data: any) => {
     try {
-      // console.log(data);
-
       const userData = {
         ...data,
         role: "user",
       };
       const res = await createUser(userData).unwrap();
-
-      console.log("res", res);
 
       if (res?.token) {
         router.push("/");

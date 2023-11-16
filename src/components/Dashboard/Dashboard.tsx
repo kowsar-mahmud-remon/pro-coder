@@ -13,8 +13,6 @@ const DashboardPage = () => {
 
   const { register, handleSubmit } = useForm();
 
-  // console.log(isLoggedIn());
-
   const onSubmit = async (data: any) => {
     try {
       const userData = {
@@ -27,11 +25,9 @@ const DashboardPage = () => {
         course_price: Number(data?.course_price),
       };
 
-      const res = await CreateCourseCatalog(userData);
+      const res = await CreateCourseCatalog(userData).unwrap();
 
-      console.log("res", res?.data?.statusCode);
-
-      if (res?.data?.statusCode === 200) {
+      if (res?.statusCode === 200) {
         router.push("/courseCatalog");
         toast.success("Successfully Create Course!");
       }
@@ -146,7 +142,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className="text-4xl mt-20 text-center text-red-500 font-bold">
+    <div className="text-4xl mt-20 mb-64 text-center text-red-500 font-bold">
       <h2>Only Admin Access This Page</h2>
     </div>
   );
