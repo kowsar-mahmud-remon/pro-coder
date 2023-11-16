@@ -28,7 +28,7 @@ const SignUpPage = () => {
 
       if (res?.token) {
         router.push("/");
-        toast.success("Successfully toasted!");
+        toast.success("Successfully Register!");
       }
 
       storeUserInfo({ accessToken: res?.token });

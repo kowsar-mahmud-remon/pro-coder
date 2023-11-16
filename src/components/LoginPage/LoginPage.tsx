@@ -2,12 +2,32 @@ import { useForm } from "react-hook-form";
 import Head from "next/head";
 import styles from "@/styles/Login.module.css";
 import Link from "next/link";
+import { useUserLoginMutation } from "@/redux/features/auth/authApi";
+import { useRouter } from "next/navigation";
+import { storeUserInfo } from "@/services/auth.service";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
+  const [userLogin] = useUserLoginMutation();
+  const router = useRouter();
   const { register, handleSubmit } = useForm();
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  // console.log(isLoggedIn());
+
+  const onSubmit = async (data: any) => {
+    try {
+      const res = await userLogin({ ...data }).unwrap();
+
+      if (res?.token) {
+        router.push("/");
+        toast.success("Login Successful!");
+      }
+
+      storeUserInfo({ accessToken: res?.token });
+    } catch (err: any) {
+      console.error(err.message);
+      toast.error("Login failed");
+    }
   };
 
   return (

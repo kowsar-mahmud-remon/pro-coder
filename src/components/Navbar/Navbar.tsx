@@ -2,8 +2,25 @@ import React from "react";
 import logo from "../../assets/logo.png";
 import Link from "next/link";
 import Image from "next/image";
+import { isLoggedIn, removeUserInfo } from "@/services/auth.service";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const userLoggedIn = isLoggedIn();
+  const router = useRouter();
+
+  const [clientRender, setClientRender] = useState(false);
+
+  useEffect(() => {
+    setClientRender(true);
+  }, []);
+
+  const logOut = () => {
+    removeUserInfo("accessToken");
+    router.push("/login");
+  };
+
   const menuItems = (
     <React.Fragment>
       <li className="">
@@ -23,7 +40,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full bg-white  sticky top-0 z-10" style={navbarShadow}>
+    <div className="w-full bg-secondary sticky top-0 z-10" style={navbarShadow}>
       <div className="max-w-[1440px] mx-auto navbar flex justify-between py-0">
         <div className="navbar-start w-full">
           <div className="dropdown">
@@ -45,7 +62,7 @@ const Navbar = () => {
             </label>
             <ul
               tabIndex={1}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-white"
             >
               {menuItems}
             </ul>
@@ -61,11 +78,28 @@ const Navbar = () => {
               height={500}
               alt="Picture of the logo"
             />{" "}
-            <h2 className="text-2xl font-semibold text-secondary">Pro Coder</h2>
+            <h2 className="text-2xl font-semibold text-white">Pro Coder</h2>
           </Link>
         </div>
-        <div className="navbar-center hidden lg:flex">
+        <div className="navbar-center hidden lg:flex text-white">
           <ul className="menu menu-horizontal p-0 text-lg">{menuItems}</ul>
+        </div>
+
+        <div className="text-white">
+          {clientRender && userLoggedIn ? (
+            <button
+              onClick={logOut}
+              className="px-4 py-1 w-24 rounded-lg bg-red-500"
+            >
+              Log Out
+            </button>
+          ) : (
+            <Link href="/login">
+              <button className="px-4 py-1 w-24 rounded-lg bg-green-500">
+                Login
+              </button>
+            </Link>
+          )}
         </div>
       </div>
     </div>
