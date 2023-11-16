@@ -1,7 +1,12 @@
 import React from "react";
+import CourseCatalogPage from "../CourseCatalog/CourseCatalog";
 
-const Home = () => {
-  return <div></div>;
+const HomePage = () => {
+  return (
+    <div>
+      <CourseCatalogPage></CourseCatalogPage>
+    </div>
+  );
 };
 
-export default Home;
+export default HomePage;
