@@ -1,13 +1,41 @@
-import { useForm } from "react-hook-form";
-import Head from "next/head";
-import styles from "@/styles/Login.module.css";
+import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
+import { useCreateUserMutation } from "@/redux/features/user/userApi";
+import { useRouter } from "next/navigation";
+import { storeUserInfo } from "@/services/auth.service";
+import toast from "react-hot-toast";
 
 const SignUpPage = () => {
+  const [createUser, { data }] = useCreateUserMutation();
+  console.log({ data });
+  const router = useRouter();
+
   const { register, handleSubmit } = useForm();
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  // console.log(isLoggedIn());
+
+  const onSubmit = async (data: any) => {
+    try {
+      // console.log(data);
+
+      const userData = {
+        ...data,
+        role: "user",
+      };
+      const res = await createUser(userData).unwrap();
+
+      console.log("res", res);
+
+      if (res?.token) {
+        router.push("/");
+        toast.success("Successfully toasted!");
+      }
+
+      storeUserInfo({ accessToken: res?.token });
+    } catch (err: any) {
+      console.error(err.message);
+      toast.error("Sign Up failed");
+    }
   };
 
   return (
